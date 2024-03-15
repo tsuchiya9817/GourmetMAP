@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
       <div class="col col-md-offset-3 col-md-6">
         <nav class="card mt-5">
-          <div class="card-header">ユーザー情報編集</div>
+          <div class="card-header">レストラン編集画面</div>
           <div class="card-body">
             @if($errors->any())
               <div class="alert alert-danger">
@@ -17,21 +17,20 @@
             <form action="" method="POST" enctype="multipart/form-data">
               @csrf
               <div class="form-group">
-                <label for="name">ユーザー名</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ $users['name'] }}" />
+                <label for="restrant">店名</label>
+                <input type="text" class="form-control" id="restrant" name="restrant" value="{{ $restrant->restrant }}" />
               </div>
               <div class="form-group">
-                <label for="email">メールアドレス</label>
-                <input type="text" class="form-control" id="email" name="email" value="{{ $users['email'] }}" />
+                <label for="adress">住所</label>
+                <input type="text" class="form-control" id="adress" name="adress" value="{{ $restrant->adress }}" />
               </div>
               <div class="form-group">
-                <label for="user_icon">アイコン画像</label>
-                <input type="file" class="form-controls" id="user_icons" name='user_icon' value="{{ $users['path'] }}" accept=".png, .jpg, .jpeg">
+                <label for="lat">緯度</label>
+                <input type="text" class="form-control" id="lat" name="lat" value="{{ $restrant->lat }}" />
               </div>
-              
               <div class="form-group">
-                <label for="profile">プロフィール</label>
-                <textarea class='form-control' name='profile' id="profile">{{ $users['profile'] }}</textarea>
+                <label for="lng">経度</label>
+                <input type="text" class="form-control" id="lng" name="lng" value="{{ $restrant->lng }}" />
               </div>
               <div class="text-right">
                 <button type="submit" class="btn btn-primary">登録</button>

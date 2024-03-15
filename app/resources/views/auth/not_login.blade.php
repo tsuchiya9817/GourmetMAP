@@ -12,6 +12,8 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyCTzFsGxWe3BrumF-hOy27M2tXq9D_Nn7w&language=ja"></script>
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <script>
@@ -26,30 +28,6 @@
             $('div#back').css('display','none');
         });
     });
-
-    $(function () {
-        $('button.side').on('click', () => {
-          $(this).toggleClass('active');//ボタン自身に activeクラスを付与し
-          $("div#box").toggleClass('panelactive');
-          $("div#results").toggleClass('panelactive');
-          $("div#mapArea_serch").toggleClass('panelactive');
-        });
-    });
-
-    $(function () {
-        $('a#delete').on('click', () => {
-    if(!confirm('本当に削除しますか？')){
-        /* キャンセルの時の処理 */
-        return false;
-    }else{
-        /*　OKの時の処理 */
-        location.href = 'index.html';
-    }
-    })
-});
-
-
-
     </script>
 
     <!-- Fonts -->
@@ -61,16 +39,9 @@
 <style>
     html { height: 100% }
     body { height: 100% }
-    #mapArea { height: 94%; width: 100%; position: relative}
+    #map { height: 94%; width: 100%; position: relative}
 
-    #box { height: 94%; width:20%; background-color: white; position: absolute; left: 0%; top: 6%; padding:1%;transition: all 0.6s;}
-
-    #box.panelactive{left: -20%;}
-    #mapArea_serch{width: 20%; height: 20%; margin:1%;padding: 1%;background: white;position:absolute; left: 20%; top: 6%;border-radius:25px;transition: all 0.6s;}
-    #mapArea_serch.panelactive{left: 0%;}
-
-    #results{width: 20%; height: 68%; padding: 10px; overflow-y: scroll; background: white;position: absolute; left: 20%; top: 27%; padding:1%;border-radius:50px; margin:1%;display:none;transition: all 0.6s;}
-    #results.panelactive{left: 0%;}
+    #box { height: 94%; width:20%; background-color: white; position: absolute; left: 0%; top: 6%; padding:1%;}
 
 .search-form {
     display: flex;
@@ -116,7 +87,7 @@
     background-repeat: no-repeat;
     content: '';
 }
-#timeline{margin-top:3%; height:87%;overflow:auto;position:relative}
+#timeline{margin-top:5%; height:87%;overflow:auto}
 #post{margin-top:2%}
 .btn--orange,
 div.btn--orange {
@@ -138,13 +109,16 @@ div.btn--radius {
 #post_user_detail{display:flex; justify-content: space-between;}
 #user_icon{background-color:white; height:3vw; width:3vw;border-radius:250px;object-fit:cover}
 #post_at{display:block}
-#box2{background-color:white;width:40vw;height:20vw;border-radius:25px;padding:1%;margin:0 auto;margin-top:10%;}
+#box2{background-color:white;width:40vw;height:20vw;border-radius:25px;padding:1%;margin:0 auto;margin-top:10%}
 #post_form_close{color:black;background-color:white}
 #my_icon{height:5vw;width:5vw;border-radius:150px;object-fit:cover}
 #post_form_detail{display:flex;margin-top:3%}
 form{margin-left:5%;width:80%}
 textarea.form-control{height:45%}
-#back{background-color:rgba(0,0,0,0.6);position: absolute;top:0;left:0;width:100%;height:100%;display:none;z-index:10000}
+button.btn btn-primary.mt-3{justify-content:;}
+#back{background-color:rgba(0,0,0,0.6);position: absolute;top:0;left:0;width:100%;height:100%;display:none}
+button.btnbtn-primary{margin-top:3%;margin-left:25%;}
+
 #mypage{background-color:white;width:60%;height:94%;margin:0 auto;border:solid 1px;overflow:auto}
 #box11{height:30%;display:flex;padding:2.5%}
 #mypage_icon{width:10vw;height:10vw;border-radius:150px;object-fit:cover}
@@ -155,7 +129,7 @@ td{font-size:1vw;font-weight:bold;white-space: nowrap ;margin:0 auto;}
 #box12{display:block}
 a#user_edit{margin-left:10%;white-space: nowrap;font-size:1vw;color:black;}
 #box13{background-color:white;width:60%;margin:0 auto;}
-button{color: #fff;background-color: #eb6100;width:20%;border-radius:150px;white-space: nowrap}
+button{color: #fff;background-color: #eb6100;width:20%;border-radius:150px}
 button#like{width:50%}
 button#follow{width:75%;margin-top:10%;margin-left:10%}
 a#like{color:white;white-space: nowrap}
@@ -164,20 +138,22 @@ a#follow{color:white;white-space: nowrap}
 #profile{width:60%;margin:0 auto;margin-top:5%}
 #post_edit{color:white}
 #button_box{margin-top:1%;text-align: right;}
-a{color:black}
+#a{color:black}
 #timeline::-webkit-scrollbar{display: none;}
 #mypage::-webkit-scrollbar{display: none;}
-#results::-webkit-scrollbar{display: none;}
 .table_design08 {
   border-collapse: collapse;
   table-layout: fixed;
   width: auto;
+  max-width: 700px;
   text-align: center;
   
 }
 .table_design08 th, .table_design08 td {
   border: 2px solid #d2e8f1;
   padding: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .table_design08 thead th {
   background-color: #4d9bc1;
@@ -194,8 +170,35 @@ a{color:black}
   font-weight: bold;
   text-align: center;
 }
-#serch_close{margin-left:80%}
-
+.table_design09 {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+  
+}
+.table_design09 th, .table_design09 td {
+  border: 2px solid #d2e8f1;
+  padding: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.table_design09 thead th {
+  background-color: #4d9bc1;
+  color: #fff;
+  border: 2px solid #4d9bc1;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+}
+.table_design09 thead th:last-of-type {
+  border-right: 2px solid #4d9bc1;
+}
+.table_design09 tbody th {
+  color: #4d9bc1;
+  font-weight: bold;
+  text-align: center;
+}
 </style>
 
 </head>
@@ -220,29 +223,29 @@ a{color:black}
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        @if(Auth::check())
-                <span class="my navbar-item"><a href="{{ route('mypage') }}" id="a">{{ Auth::user()->name }}</a></span>
-                /
-                <a href="/logout" id="a" class="my-navbar-item">ログアウト</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-                <script>
-                    document.getElementById('logout').addEventListener('click',function(event){
-                    event.preventDefault();
-                    document.getElementById('logout-form').submit();
-                    });
-                </script>
-            @else
-                    <a class="my-navbar-item" href="{{ route('login') }}">ログイン</a>
+                
+                    <a class="my-navbar-item" href="{{ route('logout') }}">ログイン</a>
                     /
-                    <a class="my-navbar-item" href="{{ route('register') }}">会員登録</a>
-            @endif
+                    <a class="my-navbar-item" href="{{ route('logout') }}">会員登録</a>
                     </ul>
                 </div>
             </div>
         </nav>
     </div>
-    @yield('content')
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">{{ __('ログイン') }}</div>
+
+                <div class="card-body">
+                    ログインできません。他のアカウントをお試しください。
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
